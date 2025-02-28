@@ -163,7 +163,7 @@ export default function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps)
               className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <p className="text-xs text-gray-400 mt-1">
-              Enter the base URL for your API (e.g., https://api.example.com)
+              Enter the base URL for your API (e.g., https://api.example.com/v1)
             </p>
           </div>
           
