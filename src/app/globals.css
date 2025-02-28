@@ -1,0 +1,367 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global variables based on example HTML */
+:root {
+  --color-gray-50: #f9f9f9;
+  --color-gray-100: #ececec;
+  --color-gray-200: #e3e3e3;
+  --color-gray-300: #cdcdcd;
+  --color-gray-400: #b4b4b4;
+  --color-gray-500: #9b9b9b;
+  --color-gray-600: #676767;
+  --color-gray-700: #4e4e4e;
+  --color-gray-800: #333333;
+  --color-gray-850: #262626;
+  --color-gray-900: #171717;
+  --color-gray-950: #0d0d0d;
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 60px;
+  --sidebar-mobile-width: 319px;
+  --sidebar-transition-duration: 300ms;
+  --sidebar-transition-timing: cubic-bezier(0.25, 0.1, 0.25, 1.0);
+  --border-color: #424242;
+}
+
+/* Global styles that apply throughout the app */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  body {
+    background-color: var(--color-gray-900);
+    color: var(--color-gray-200);
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Ensure all text content wraps properly */
+  p, h1, h2, h3, h4, h5, h6, span, div, li, td, th, blockquote, code, pre {
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  /* Ensure all containers handle overflow properly */
+  .overflow-container {
+    max-width: 100%;
+    overflow-x: hidden;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  /* Ensure code blocks don't cause horizontal scrolling */
+  pre, code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  /* Only allow horizontal scrolling for specific elements that need it */
+  .scroll-x {
+    overflow-x: auto;
+  }
+
+  /* Custom styles for Magic SDK verification screen */
+  /* These target the Magic SDK elements */
+  .magic-iframe {
+    background-color: var(--color-gray-900) !important;
+  }
+
+  /* Style the Magic verification dialog */
+  div[data-magic-dialog] {
+    background-color: var(--color-gray-850) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  /* Style the Magic verification content */
+  div[data-magic-dialog] * {
+    color: var(--color-gray-200) !important;
+  }
+
+  /* Style the Magic verification buttons */
+  div[data-magic-dialog] button {
+    background-color: #3b82f6 !important;
+    color: white !important;
+    border-radius: 12px !important;
+    transition: all 0.2s ease !important;
+  }
+
+  div[data-magic-dialog] button:hover {
+    background-color: #2563eb !important;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+  }
+
+  /* Style the Magic verification links */
+  div[data-magic-dialog] a {
+    color: #3b82f6 !important;
+  }
+
+  /* Style the Magic verification background */
+  div[data-magic-overlay] {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(5px) !important;
+  }
+}
+
+/* Reusable component classes */
+@layer components {
+  .sidebar {
+    width: var(--sidebar-width);
+    height: 100%;
+    background-color: #171717;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border-color);
+    z-index: 40;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateZ(0);
+    will-change: transform, width;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transition: width var(--sidebar-transition-duration) var(--sidebar-transition-timing), 
+                padding var(--sidebar-transition-duration) var(--sidebar-transition-timing);
+    padding: 0 0.25rem 0 0.75rem;
+    overflow: hidden;
+  }
+
+  .sidebar.closed {
+    width: 0;
+    padding: 0;
+    overflow: visible;
+  }
+  
+  /* Hide all content except the header when sidebar is closed */
+  .sidebar.closed > div > *:not(:first-child) {
+    display: none;
+  }
+  
+  /* In the header, only keep the toggle button visible */
+  .sidebar.closed > div > div:first-child > *:not(:first-child) {
+    display: none;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 11;
+    display: none;
+  }
+
+  .sidebar-overlay.visible {
+    display: block;
+  }
+
+  @media (max-width: 767px) {
+    .sidebar {
+      width: var(--sidebar-mobile-width);
+    }
+    
+    .sidebar.closed {
+      width: 0;
+      padding: 0;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .sidebar {
+      position: fixed;
+      left: 0;
+      transform: translateZ(0);
+    }
+    
+    .sidebar-overlay {
+      display: none !important;
+    }
+    
+    main {
+      margin-left: 0;
+      transform: translateZ(0);
+      will-change: transform, margin-left;
+      backface-visibility: hidden;
+      perspective: 1000px;
+      transition: margin-left var(--sidebar-transition-duration) var(--sidebar-transition-timing);
+    }
+    
+    main.with-sidebar {
+      margin-left: var(--sidebar-width);
+    }
+  }
+
+  .menu-button {
+    padding: 7px;
+    border-radius: 12px;
+    background: transparent;
+    border: none;
+    color: var(--color-gray-400);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+  }
+
+  .menu-button:hover {
+    background-color: var(--color-gray-900);
+  }
+
+  .chat-message {
+    display: flex;
+    margin-bottom: 24px;
+    max-width: 850px;
+    margin-inline: auto;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .message-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .user-message .message-avatar {
+    background-color: var(--color-gray-700);
+  }
+
+  .assistant-message .message-avatar {
+    background-color: #161616;
+  }
+
+  .sidebar.closed .menu-button {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    background-color: transparent;
+    border-radius: 12px;
+    z-index: 50;
+    color: var(--color-gray-200);
+    padding: 7px;
+  }
+
+  .sidebar.closed .menu-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Message content container */
+  .message-content {
+    flex: 1;
+    min-width: 0; /* Important for text wrapping */
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+}
+
+/* Scrollbar styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(42, 42, 42, 0.8);
+  border-radius: 999px;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+}
+
+/* Prose styling for AI messages */
+.prose {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.prose p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.75rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.prose ul, .prose ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.prose li {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.prose code {
+  background-color: rgba(55, 55, 55, 0.8);
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.25rem;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.prose pre {
+  background-color: rgba(30, 30, 30, 0.8);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.prose pre code {
+  background-color: transparent;
+  padding: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Fix for long URLs and text strings */
+.prose a {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* Fix for tables */
+.prose table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.prose td, .prose th {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
