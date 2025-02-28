@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 export default {
   content: [
@@ -95,7 +96,7 @@ export default {
   },
   plugins: [
     require('@tailwindcss/typography'),
-    function ({ addUtilities }) {
+    plugin(({ addUtilities }) => {
       const newUtilities = {
         '.text-shadow': {
           textShadow: '0 1px 3px rgba(0,0,0,0.8)',
@@ -105,6 +106,6 @@ export default {
         },
       }
       addUtilities(newUtilities)
-    },
+    }),
   ],
 } satisfies Config;

@@ -1,4 +1,4 @@
-import { Magic } from 'magic-sdk';
+import { Magic, MagicSDKAdditionalConfiguration } from 'magic-sdk';
 
 // Initialize Magic instance
 let magic: Magic | null = null;
@@ -7,7 +7,11 @@ export const getMagic = () => {
   if (typeof window === 'undefined') return null;
   
   if (!magic) {
+    // Create Magic instance with API key
     magic = new Magic('pk_live_FAD04F31C089C300', {
+      // We need to cast the configuration to MagicSDKAdditionalConfiguration
+      // because the theme property is not included in the type definitions
+      // but it is supported by the Magic SDK
       theme: {
         variables: {
           // Dark theme colors
@@ -35,7 +39,7 @@ export const getMagic = () => {
           borderRadius: '12px',
         },
       },
-    });
+    } as unknown as MagicSDKAdditionalConfiguration);
   }
   
   return magic;

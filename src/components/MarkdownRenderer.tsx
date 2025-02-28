@@ -90,17 +90,27 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
   }, [content, isStreaming]);
   
   return (
-    <div className="prose prose-invert max-w-none break-words overflow-hidden">
+    <div className="prose prose-invert max-w-none break-words overflow-hidden prose-p:my-1 prose-headings:my-2 prose-li:my-0.5 prose-ul:my-1 prose-ol:my-1 prose-blockquote:my-1.5">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          code({ node, inline, className, children, ...props }) {
+          code: ({ className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             const code = String(children).replace(/\n$/, '');
             
-            return !inline && match ? (
-              <div className="relative my-3 group">
+            // Check if this is an inline code block
+            if (!className || !match) {
+              return (
+                <code className="bg-gray-800 px-1.5 py-0.5 rounded text-sm break-words whitespace-normal" {...props}>
+                  {children}
+                </code>
+              );
+            }
+            
+            // This is a code block with syntax highlighting
+            return (
+              <div className="relative my-2 group">
                 <div className="rounded-lg overflow-hidden border border-gray-700 shadow-lg">
                   {/* Language indicator */}
                   <LanguageIndicator language={language} />
@@ -110,6 +120,7 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
                   
                   {/* Code block with syntax highlighting */}
                   <SyntaxHighlighter
+                    // @ts-expect-error - The type definitions for react-syntax-highlighter are incorrect
                     style={oneDark}
                     language={language}
                     showLineNumbers={true}
@@ -120,9 +131,17 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
                       margin: 0,
                       padding: '2.5rem 1rem 1rem 1rem',
                       borderRadius: '0.375rem',
-                      backgroundColor: '#1e293b',
+                      backgroundColor: '#121212',
                       maxWidth: '100%',
                       overflowX: 'auto',
+                      wordBreak: 'break-word',
+                      whiteSpace: 'pre-wrap',
+                    }}
+                    codeTagProps={{
+                      style: {
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word',
+                      }
                     }}
                     {...props}
                   >
@@ -130,32 +149,28 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
                   </SyntaxHighlighter>
                 </div>
               </div>
-            ) : (
-              <code className="bg-gray-800 px-1.5 py-0.5 rounded text-sm break-words whitespace-normal" {...props}>
-                {children}
-              </code>
             );
           },
           // Customize other elements with reduced spacing and proper wrapping
           p: ({ children }) => <p className="my-1 leading-relaxed break-words whitespace-normal">{children}</p>,
-          ul: ({ children }) => <ul className="list-disc pl-5 my-1.5 break-words">{children}</ul>,
-          ol: ({ children }) => <ol className="list-decimal pl-5 my-1.5 break-words">{children}</ol>,
-          li: ({ children }) => <li className="my-0.5 break-words">{children}</li>,
-          h1: ({ children }) => <h1 className="text-2xl font-bold mt-4 mb-2 break-words">{children}</h1>,
-          h2: ({ children }) => <h2 className="text-xl font-bold mt-3 mb-1.5 break-words">{children}</h2>,
-          h3: ({ children }) => <h3 className="text-lg font-bold mt-2 mb-1 break-words">{children}</h3>,
+          ul: ({ children }) => <ul className="list-disc pl-5 my-1 break-words">{children}</ul>,
+          ol: ({ children }) => <ol className="list-decimal pl-5 my-1 break-words">{children}</ol>,
+          li: ({ children }) => <li className="my-0 break-words">{children}</li>,
+          h1: ({ children }) => <h1 className="text-2xl font-bold mt-3 mb-1 break-words">{children}</h1>,
+          h2: ({ children }) => <h2 className="text-xl font-bold mt-2 mb-1 break-words">{children}</h2>,
+          h3: ({ children }) => <h3 className="text-lg font-bold mt-1.5 mb-0.5 break-words">{children}</h3>,
           a: ({ href, children }) => (
             <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline break-words overflow-wrap">
               {children}
             </a>
           ),
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-gray-600 pl-4 py-0.5 my-2 text-gray-300 bg-gray-800/30 rounded-r break-words">
+            <blockquote className="border-l-4 border-gray-600 pl-4 py-0.5 my-1.5 text-gray-300 bg-gray-800/30 rounded-r break-words">
               {children}
             </blockquote>
           ),
           table: ({ children }) => (
-            <div className="overflow-x-auto my-3 max-w-full">
+            <div className="overflow-x-auto my-2 max-w-full">
               <table className="border-collapse border border-gray-700 w-full table-auto">
                 {children}
               </table>
@@ -174,14 +189,23 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
           // Handle pre tags for better overflow
           pre: ({ children }) => <pre className="overflow-x-auto max-w-full">{children}</pre>,
           // Handle images to prevent overflow
-          img: ({ src, alt, ...props }) => (
-            <img 
-              src={src} 
-              alt={alt || ''} 
-              className="max-w-full h-auto rounded-md" 
-              {...props} 
-            />
-          ),
+          img: ({ src, alt, ...props }) => {
+            if (!src) return null;
+            
+            // For external images, we need to use a regular img tag
+            // as Next.js Image requires either width/height or layout="fill"
+            return (
+              <div className="my-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={src} 
+                  alt={alt || ''} 
+                  className="max-w-full h-auto rounded-md" 
+                  {...props} 
+                />
+              </div>
+            );
+          },
         }}
       >
         {renderedContent}
