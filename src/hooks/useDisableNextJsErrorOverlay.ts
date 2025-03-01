@@ -12,7 +12,7 @@ export function useDisableNextJsErrorOverlay() {
       const originalConsoleError = console.error;
       
       // Override console.error to filter out specific React errors
-      console.error = (...args: any[]) => {
+      console.error = (...args: unknown[]) => {
         // Check if this is a React error that would trigger the overlay
         const isReactRefreshError = args.some(arg => 
           typeof arg === 'string' && 

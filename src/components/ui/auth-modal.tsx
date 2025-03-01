@@ -126,7 +126,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 </button>
                 
                 <div className="text-center text-sm text-gray-400 mt-4">
-                  No password needed! We'll send you a magic link to your email.
+                  No password needed! We&apos;ll send you a magic link to your email.
                 </div>
               </form>
               

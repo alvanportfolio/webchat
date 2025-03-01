@@ -6,11 +6,7 @@ import ApiConfigModal from './ApiConfigModal';
 import { useApiConfigStore } from '@/store/apiConfigStore';
 import { GiFairyWand } from "react-icons/gi";
 
-interface ChatHeaderProps {
-  title: string;
-}
-
-export default function ChatHeader({ title }: ChatHeaderProps) {
+export default function ChatHeader() {
   const [showAiDialog, setShowAiDialog] = useState(false);
   const [showApiConfigModal, setShowApiConfigModal] = useState(false);
   const { isConfigured } = useApiConfigStore();
@@ -96,7 +92,7 @@ export default function ChatHeader({ title }: ChatHeaderProps) {
               {!isConfigured && (
                 <div className="mt-4 p-3 bg-blue-900/30 border border-blue-700 rounded-lg">
                   <p className="text-blue-200 text-sm">
-                    You haven't configured your API yet. Click the button below to set up your API connection.
+                    You haven&apos;t configured your API yet. Click the button below to set up your API connection.
                   </p>
                   <button 
                     className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"

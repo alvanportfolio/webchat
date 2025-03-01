@@ -1,7 +1,6 @@
 'use client';
 
 import './globals.css'
-import { useEffect } from 'react';
 import Sidebar from '@/components/Sidebar';
 import { useSidebarStore } from '@/store/sidebarStore';
 import ToastProvider from '@/components/ToastProvider';

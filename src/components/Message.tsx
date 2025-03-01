@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
 import MarkdownRenderer from './MarkdownRenderer';
 import ThinkingSection from './ThinkingSection';
 import { parseAIMessage } from '../utils/messageParser';
@@ -13,7 +13,7 @@ interface MessageProps {
   pending?: boolean;
 }
 
-export default function Message({ content, isUser, timestamp, isStreaming = false, pending = false }: MessageProps) {
+export default function Message({ content, isUser, isStreaming = false, pending = false }: MessageProps) {
   // Parse AI messages to extract reasoning and final response
   const { reasoning, finalResponse } = useMemo(() => {
     if (isUser) {

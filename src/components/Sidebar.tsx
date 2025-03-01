@@ -15,10 +15,10 @@ type GroupedChats = {
 };
 
 export default function Sidebar() {
-  const { chats, getGroupedChats, updateChat, deleteChat } = useChatHistoryStore();
+  const { getGroupedChats, updateChat, deleteChat } = useChatHistoryStore();
   const { clearConversation } = useConversationStore();
   const { username, profilePicture, updateProfile } = useUserProfileStore();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeChatOptions, setActiveChatOptions] = useState<string | null>(null);
   const [showProfileModal, setShowProfileModal] = useState(false);

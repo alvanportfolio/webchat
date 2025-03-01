@@ -212,7 +212,7 @@ export default function ChatContainer({ chatId }: ChatContainerProps) {
 
   return (
     <div className="flex flex-col h-full bg-[#212121]">
-      <ChatHeader title="AI Chat" />
+      <ChatHeader />
       
       <div className="flex-1 overflow-y-auto custom-scrollbar max-w-3xl mx-auto w-full h-[calc(100vh-180px)] pb-9 transform translateZ(0) will-change-transform">
         {renderChatContent()}

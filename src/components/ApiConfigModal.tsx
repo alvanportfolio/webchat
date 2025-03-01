@@ -7,6 +7,13 @@ interface ApiConfigModalProps {
   onClose: () => void;
 }
 
+// Add a type definition for the model data
+interface ModelData {
+  id: string;
+  // Replace any with a more specific type
+  [key: string]: string | number | boolean | null | undefined;
+}
+
 export default function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
   const { 
     baseUrl, 
@@ -105,7 +112,7 @@ export default function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps)
         return;
       }
       
-      const models = data.data.map((model: any) => ({
+      const models = data.data.map((model: ModelData) => ({
         id: model.id,
         name: model.id
       }));

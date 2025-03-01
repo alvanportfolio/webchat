@@ -3,12 +3,10 @@
 import { useParams } from 'next/navigation';
 import ChatContainer from '@/components/ChatContainer';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import { useToast } from '@/components/ToastProvider';
 
 export default function ChatPage() {
   const params = useParams();
   const chatId = params.id as string;
-  const { showToast } = useToast();
 
   // Custom fallback UI for the error boundary
   const fallbackUI = (
@@ -16,7 +14,7 @@ export default function ChatPage() {
       <div className="bg-red-900/20 border border-red-700 rounded-lg p-6 max-w-md">
         <h2 className="text-xl font-semibold text-red-300 mb-3">Connection Error</h2>
         <p className="text-gray-300 mb-4">
-          We couldn't connect to the AI provider. Please check your API configuration or try again later.
+          We couldn&apos;t connect to the AI provider. Please check your API configuration or try again later.
         </p>
         <button
           onClick={() => window.location.reload()}

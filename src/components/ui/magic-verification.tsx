@@ -83,7 +83,7 @@ export function CustomMagicVerificationUI() {
           </div>
           <h2 className="text-2xl font-bold text-white">Check your email</h2>
           <p className="text-gray-300 mt-2">
-            We've sent you a magic link to verify your email address
+            We&apos;ve sent you a magic link to verify your email address
           </p>
         </div>
         
@@ -91,7 +91,7 @@ export function CustomMagicVerificationUI() {
           <div className="bg-gray-800/50 p-4 rounded-xl border border-gray-700">
             <p className="text-gray-300 text-sm">
               Please check your inbox and click the link we sent you to sign in. 
-              If you don't see it, check your spam folder.
+              If you don&apos;t see it, check your spam folder.
             </p>
           </div>
           

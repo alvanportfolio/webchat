@@ -67,7 +67,8 @@ export const useConversationStore = create<ConversationState>()(
       },
       
       clearConversation: (chatId) => set((state) => {
-        const { [chatId]: _, ...restConversations } = state.conversations;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { [chatId]: _unused, ...restConversations } = state.conversations;
         return {
           conversations: restConversations,
         };

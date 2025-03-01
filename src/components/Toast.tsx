@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 export type ToastType = 'success' | 'error' | 'info';
 
@@ -11,11 +11,8 @@ interface ToastProps {
 }
 
 export default function Toast({ message, type, duration = 3000, onClose }: ToastProps) {
-  const [isVisible, setIsVisible] = useState(true);
-  
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsVisible(false);
       setTimeout(onClose, 300); // Allow time for exit animation
     }, duration);
     
@@ -79,7 +76,6 @@ export default function Toast({ message, type, duration = 3000, onClose }: Toast
       <div className="mr-4 font-medium">{message}</div>
       <button 
         onClick={() => {
-          setIsVisible(false);
           setTimeout(onClose, 300);
         }}
         className="ml-auto flex-shrink-0 opacity-70 hover:opacity-100 transition-opacity"

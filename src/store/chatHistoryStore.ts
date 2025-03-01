@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { useConversationStore } from './conversationStore';
 
 export interface ChatItem {
   id: string;
