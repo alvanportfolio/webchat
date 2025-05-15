@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image'; // Import Next.js Image
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -88,12 +89,19 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: 'spring', damping: 30, stiffness: 400 }}
-              className="w-[90%] max-w-md p-8 rounded-3xl shadow-2xl 
-                        bg-gray-900 border border-gray-700/50 
-                        dark:bg-black/95 dark:border-gray-800/70 pointer-events-auto" // Slightly adjusted background for better contrast
+              className="w-[90%] max-w-md p-8 rounded-3xl shadow-2xl
+                        bg-gray-900 border border-gray-700/50
+                        dark:bg-black/95 dark:border-gray-800/70 pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="text-center mb-8">
+              <div className="flex flex-col items-center text-center mb-8"> {/* Centering icon and text */}
+                <Image
+                  src="/icon.ico" // Assuming icon.ico is in public directory
+                  alt="Alvan World Icon"
+                  width={56} // Adjust size as needed (e.g., w-14 h-14)
+                  height={56}
+                  className="mb-4 rounded-lg" // Optional: if your icon looks better with rounded corners
+                />
                 <h2 className="text-2xl font-bold text-white">Welcome to Alvan World</h2>
                 <p className="text-gray-300 mt-2">
                   Sign in with your email to continue

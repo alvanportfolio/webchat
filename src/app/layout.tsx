@@ -1,4 +1,4 @@
-'use client';
+'use client'; // This remains for client-side hooks and providers
 
 import './globals.css'
 import Sidebar from '@/components/Sidebar';
@@ -8,7 +8,27 @@ import { usePathname } from 'next/navigation';
 import { AuthProvider } from '@/context/AuthContext';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { useDisableNextJsErrorOverlay } from '@/hooks/useDisableNextJsErrorOverlay';
-import { SessionProvider } from 'next-auth/react'; // Added SessionProvider
+import { SessionProvider } from 'next-auth/react';
+import type { Metadata } from 'next'; // Import Metadata type
+
+// Define metadata for icons
+export const metadata: Metadata = {
+  title: 'Alvan World - AI Chat', // You can customize the title
+  description: 'An intelligent AI chat application.', // Customize description
+  icons: {
+    icon: [ // Standard favicons
+      { url: '/icons/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icons/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      // You can also link your src/app/favicon.ico directly if preferred
+      // { url: '/favicon.ico', type: 'image/x-icon', sizes: 'any' }
+    ],
+    apple: '/icons/apple-touch-icon.png', // Apple touch icon
+    // You can add other icons like shortcut or manifest icons here if needed
+    // shortcut: '/icons/icon-192x192.png', 
+  },
+  // If you create a manifest.json for PWA features, link it here:
+  // manifest: '/manifest.json', 
+};
 
 export default function RootLayout({
   children,
@@ -18,13 +38,10 @@ export default function RootLayout({
   const { isOpen: isSidebarOpen, setOpen } = useSidebarStore();
   const pathname = usePathname();
   
-  // Disable Next.js error overlay in development mode
   useDisableNextJsErrorOverlay();
   
-  // Only show sidebar on chat pages
   const showSidebar = pathname?.includes('/chat');
   
-  // Global error fallback UI
   const globalErrorFallback = (
     <div className="flex items-center justify-center h-screen bg-gray-900 p-4">
       <div className="bg-red-900/20 border border-red-700 rounded-lg p-6 max-w-md text-center">
@@ -44,15 +61,13 @@ export default function RootLayout({
   
   return (
     <html lang="en" suppressHydrationWarning>
+      {/* The <head> tag is automatically managed by Next.js based on metadata */}
       <body className="bg-gray-900">
         <ErrorBoundary fallback={globalErrorFallback}>
-          <SessionProvider> {/* Wrapped AuthProvider with SessionProvider */}
+          <SessionProvider>
             <AuthProvider>
               <ToastProvider>
-                {/* Removed MagicVerification component */}
-                
                 <div className="app-container flex h-screen w-full overflow-hidden">
-                  {/* Sidebar - only show on chat pages */}
                   {showSidebar && (
                     <>
                       <div 
@@ -64,8 +79,6 @@ export default function RootLayout({
                       >
                         <Sidebar />
                       </div>
-                      
-                      {/* Sidebar overlay for mobile */}
                       {isSidebarOpen && (
                         <div 
                           className="sidebar-overlay visible md:hidden"
@@ -78,8 +91,6 @@ export default function RootLayout({
                       )}
                     </>
                   )}
-                  
-                  {/* Main content */}
                   <main 
                     className={`flex-1 overflow-hidden ${showSidebar && isSidebarOpen ? 'with-sidebar' : ''}`}
                     style={{ 

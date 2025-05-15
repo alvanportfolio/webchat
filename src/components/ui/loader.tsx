@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image'; // Import Next.js Image component
 
 interface LoaderProps {
   message?: string;
@@ -39,8 +40,26 @@ export function Loader({ message = "Loading...", size = 'medium' }: LoaderProps)
 
 export function FullPageLoader({ message = "Loading Alvan World..." }: { message?: string }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 z-[100]">
-      <Loader message={message} size="large" />
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-gray-950 z-[100]"> {/* Darker background */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.7 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.7 }}
+        transition={{
+          opacity: { duration: 0.5, ease: "easeInOut" },
+          scale: { type: "spring", damping: 15, stiffness: 200 }
+        }}
+        className="mb-6" // Space between icon and spinner/text
+      >
+        <Image
+          src="/icon.ico" // Assuming icon.ico is moved to public directory
+          alt="Alvan World Loading Icon"
+          width={80} // Adjust size as needed
+          height={80}
+          className="animate-pulse" // Simple pulse animation for the icon
+        />
+      </motion.div>
+      <Loader message={message} size="medium" /> {/* Spinner can be medium now */}
     </div>
   );
 }
