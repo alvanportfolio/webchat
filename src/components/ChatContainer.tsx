@@ -18,14 +18,16 @@ interface ChatContainerProps {
 export default function ChatContainer({ chatId }: ChatContainerProps) {
   const { getMessages, addMessage, updateMessage, removeMessage } = useConversationStore();
   const { baseUrl, apiKey, selectedModel, isConfigured } = useApiConfigStore();
-  const { addChat, updateChat } = useChatHistoryStore();
+  const { addChat, updateChat, getChatById } = useChatHistoryStore(); // Added getChatById
   const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isClient, setIsClient] = useState(false);
   
-  const currentChatId = chatId || 'default';
+  // chatId should always be provided by the page, now as a UUID.
+  // If chatId is somehow undefined, it's an issue upstream.
+  const currentChatId = chatId as string;
   const messages = getMessages(currentChatId);
 
   // Set isClient to true on component mount
@@ -54,38 +56,45 @@ export default function ChatContainer({ chatId }: ChatContainerProps) {
     }
   }, [isConfigured, isClient]);
 
-  // Update chat history when messages change
+  // Update chat history (title, last message time) when messages change, if chat already exists in history
   useEffect(() => {
-    if (messages.length > 0) {
+    if (messages.length > 0 && getChatById(currentChatId)) { // Only update if chat exists
       const lastMessage = messages[messages.length - 1];
-      const chatTitle = messages.find(m => m.isUser)?.content.slice(0, 30) + '...' || 'New Chat';
+      // Generate title from the first user message if possible, or keep existing if more robust title logic is added later
+      const firstUserMessage = messages.find(m => m.isUser);
+      const chatTitle = firstUserMessage?.content.slice(0, 30) + '...' || getChatById(currentChatId)?.title || 'Chat';
       
-      addChat({
-        id: currentChatId,
-        title: chatTitle,
-        lastMessageTime: lastMessage.timestamp
-      });
-      
-      // Update chat title and last message time
       updateChat(currentChatId, {
         title: chatTitle,
-        lastMessageTime: lastMessage.timestamp
+        lastMessageTime: lastMessage.timestamp,
       });
     }
-  }, [messages, currentChatId, addChat, updateChat]);
+  }, [messages, currentChatId, updateChat, getChatById]);
 
   const handleSendMessage = async (content: string) => {
-    if (!content.trim() || isLoading) return;
-    
+    if (!content.trim() || isLoading || !currentChatId) return; // Ensure currentChatId is valid
+
+    const isFirstMessage = getMessages(currentChatId).length === 0;
+
     // Add user message
     const userMessage: MessageType = {
-      id: Date.now().toString(),
+      id: Date.now().toString(), // Consider UUID for message IDs too if needed for uniqueness
       content,
       isUser: true,
       timestamp: new Date().toISOString(),
     };
     
     addMessage(currentChatId, userMessage);
+
+    // If it's the first message of this chat, add it to chat history
+    if (isFirstMessage) {
+      const chatTitle = content.slice(0, 30) + '...' || 'New Chat';
+      addChat({
+        id: currentChatId, // This is the UUID from the URL
+        title: chatTitle,
+        lastMessageTime: userMessage.timestamp,
+      });
+    }
     
     // Check if API is configured
     if (!isConfigured || !baseUrl || !apiKey || !selectedModel) {

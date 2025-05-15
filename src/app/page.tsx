@@ -6,32 +6,49 @@ import { BackgroundPaths } from '@/components/ui/background-paths';
 import { AuthModal } from '@/components/ui/auth-modal';
 import { useAuth } from '@/context/AuthContext';
 import { ShimmerButton } from '@/components/ui/shimmer-button';
+import { FullPageLoader } from '@/components/ui/loader'; // Import the loader
 
 export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { isLoggedIn, isLoading } = useAuth();
   const router = useRouter();
 
+  // Effect to redirect to /chat if user is already logged in when visiting home
+  useEffect(() => {
+    if (!isLoading && isLoggedIn) {
+      // Don't create a new chat ID here, just go to the main chat page
+      // The /chat page will handle creating a new chat or loading an existing one.
+      router.push('/chat');
+    }
+  }, [isLoading, isLoggedIn, router]);
+
   // Handle the "Start Your Journey" button click
   const handleStartJourney = () => {
     if (isLoggedIn) {
-      // If user is logged in, redirect to chat
-      const newChatId = Date.now().toString();
-      router.push(`/chat/${newChatId}`);
+      // If user is logged in, redirect to chat (already handled by above useEffect, but good for explicit action)
+      router.push('/chat');
     } else {
       // If not logged in, show auth modal
       setShowAuthModal(true);
     }
   };
 
-  // If user logs in while modal is open, close it and redirect
+  // If user logs in (e.g. through modal, then email link, then comes back),
+  // the main useEffect above should handle the redirect to /chat.
+  // This specific effect for showAuthModal might be redundant or can be simplified.
+  // For now, let's keep it, but the primary redirect is the new useEffect.
   useEffect(() => {
     if (isLoggedIn && showAuthModal) {
       setShowAuthModal(false);
-      const newChatId = Date.now().toString();
-      router.push(`/chat/${newChatId}`);
+      // router.push('/chat'); // Already handled by the main redirect effect
     }
   }, [isLoggedIn, showAuthModal, router]);
+
+
+  // If loading or already logged in (and redirecting), show minimal UI or loading
+  if (isLoading || (!isLoading && isLoggedIn)) { // Show loader while auth state is resolving or redirecting
+    return <FullPageLoader message="Initializing..." />;
+  }
 
   return (
     <div className="h-full">

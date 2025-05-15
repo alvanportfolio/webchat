@@ -23,7 +23,7 @@ export default function Message({ content, isUser, isStreaming = false, pending 
   }, [content, isUser]);
 
   return (
-    <div className={`flex w-full ${isUser ? 'justify-end' : 'justify-start'} mb-4 overflow-hidden`}>
+    <div className={`flex w-full ${isUser ? 'justify-end' : 'justify-start'} mb-2 overflow-hidden`}>
       {isUser ? (
         <div className="max-w-[90%] md:max-w-[80%] lg:max-w-[70%] bg-[#2f2f2f] text-[#ececec] rounded-2xl px-5 py-2.5 whitespace-pre-wrap break-words overflow-hidden">
           {content}

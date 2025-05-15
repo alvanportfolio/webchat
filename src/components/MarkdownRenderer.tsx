@@ -90,7 +90,7 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
   }, [content, isStreaming]);
   
   return (
-    <div className="prose prose-invert max-w-none break-words overflow-hidden prose-p:my-1 prose-headings:my-2 prose-li:my-0.5 prose-ul:my-1 prose-ol:my-1 prose-blockquote:my-1.5">
+    <div className="prose prose-invert max-w-none break-words overflow-hidden prose-p:my-0.5 prose-headings:my-1.5 prose-li:my-0 prose-ul:my-0.5 prose-ol:my-0.5 prose-blockquote:my-1">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -152,10 +152,10 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
             );
           },
           // Customize other elements with reduced spacing and proper wrapping
-          p: ({ children }) => <p className="my-1 leading-relaxed break-words whitespace-normal">{children}</p>,
-          ul: ({ children }) => <ul className="list-disc pl-5 my-1 break-words">{children}</ul>,
-          ol: ({ children }) => <ol className="list-decimal pl-5 my-1 break-words">{children}</ol>,
-          li: ({ children }) => <li className="my-0 break-words">{children}</li>,
+          p: ({ children }) => <p className="my-0.5 leading-normal break-words whitespace-normal">{children}</p>, // Reduced margin, tighter leading
+          ul: ({ children }) => <ul className="list-disc pl-5 my-0.5 break-words">{children}</ul>, // Reduced margin
+          ol: ({ children }) => <ol className="list-decimal pl-5 my-0.5 break-words">{children}</ol>, // Reduced margin
+          li: ({ children }) => <li className="my-0 leading-normal break-words">{children}</li>, // Added tighter leading
           h1: ({ children }) => <h1 className="text-2xl font-bold mt-3 mb-1 break-words">{children}</h1>,
           h2: ({ children }) => <h2 className="text-xl font-bold mt-2 mb-1 break-words">{children}</h2>,
           h3: ({ children }) => <h3 className="text-lg font-bold mt-1.5 mb-0.5 break-words">{children}</h3>,

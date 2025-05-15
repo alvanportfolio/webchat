@@ -6,9 +6,9 @@ import { useSidebarStore } from '@/store/sidebarStore';
 import ToastProvider from '@/components/ToastProvider';
 import { usePathname } from 'next/navigation';
 import { AuthProvider } from '@/context/AuthContext';
-import { MagicVerification } from '@/components/ui/magic-verification';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { useDisableNextJsErrorOverlay } from '@/hooks/useDisableNextJsErrorOverlay';
+import { SessionProvider } from 'next-auth/react'; // Added SessionProvider
 
 export default function RootLayout({
   children,
@@ -46,52 +46,53 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="bg-gray-900">
         <ErrorBoundary fallback={globalErrorFallback}>
-          <AuthProvider>
-            <ToastProvider>
-              {/* Magic Verification UI Enhancement */}
-              <MagicVerification />
-              
-              <div className="app-container flex h-screen w-full overflow-hidden">
-                {/* Sidebar - only show on chat pages */}
-                {showSidebar && (
-                  <>
-                    <div 
-                      className={`sidebar ${isSidebarOpen ? '' : 'closed'}`}
-                      style={{ 
-                        transform: 'translate3d(0,0,0)',
-                        WebkitTransform: 'translate3d(0,0,0)'
-                      }}
-                    >
-                      <Sidebar />
-                    </div>
-                    
-                    {/* Sidebar overlay for mobile */}
-                    {isSidebarOpen && (
+          <SessionProvider> {/* Wrapped AuthProvider with SessionProvider */}
+            <AuthProvider>
+              <ToastProvider>
+                {/* Removed MagicVerification component */}
+                
+                <div className="app-container flex h-screen w-full overflow-hidden">
+                  {/* Sidebar - only show on chat pages */}
+                  {showSidebar && (
+                    <>
                       <div 
-                        className="sidebar-overlay visible md:hidden"
-                        onClick={() => setOpen(false)}
+                        className={`sidebar ${isSidebarOpen ? '' : 'closed'}`}
                         style={{ 
                           transform: 'translate3d(0,0,0)',
                           WebkitTransform: 'translate3d(0,0,0)'
                         }}
-                      />
-                    )}
-                  </>
-                )}
-                
-                {/* Main content */}
-                <main 
-                  className={`flex-1 overflow-hidden ${showSidebar && isSidebarOpen ? 'with-sidebar' : ''}`}
-                  style={{ 
-                    transform: 'translate3d(0,0,0)',
-                    WebkitTransform: 'translate3d(0,0,0)'
-                  }}
-                >
-                  {children}
-                </main>
-              </div>
-            </ToastProvider>
-          </AuthProvider>
+                      >
+                        <Sidebar />
+                      </div>
+                      
+                      {/* Sidebar overlay for mobile */}
+                      {isSidebarOpen && (
+                        <div 
+                          className="sidebar-overlay visible md:hidden"
+                          onClick={() => setOpen(false)}
+                          style={{ 
+                            transform: 'translate3d(0,0,0)',
+                            WebkitTransform: 'translate3d(0,0,0)'
+                          }}
+                        />
+                      )}
+                    </>
+                  )}
+                  
+                  {/* Main content */}
+                  <main 
+                    className={`flex-1 overflow-hidden ${showSidebar && isSidebarOpen ? 'with-sidebar' : ''}`}
+                    style={{ 
+                      transform: 'translate3d(0,0,0)',
+                      WebkitTransform: 'translate3d(0,0,0)'
+                    }}
+                  >
+                    {children}
+                  </main>
+                </div>
+              </ToastProvider>
+            </AuthProvider>
+          </SessionProvider>
         </ErrorBoundary>
       </body>
     </html>
