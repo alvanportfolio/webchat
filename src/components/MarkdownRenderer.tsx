@@ -152,10 +152,54 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
             );
           },
           // Customize other elements with reduced spacing and proper wrapping
-          p: ({ children }) => <p className="my-0.5 leading-normal break-words whitespace-normal">{children}</p>, // Reduced margin, tighter leading
-          ul: ({ children }) => <ul className="list-disc pl-5 my-0.5 break-words">{children}</ul>, // Reduced margin
-          ol: ({ children }) => <ol className="list-decimal pl-5 my-0.5 break-words">{children}</ol>, // Reduced margin
-          li: ({ children }) => <li className="my-0 leading-normal break-words">{children}</li>, // Added tighter leading
+          p: ({ children, node }) => {
+            // Check if the paragraph is directly inside a list item
+            const isInsideLi = node?.position?.start.line !== node?.position?.end.line || (node?.children.length > 0 && node.children[0].type === 'text'); // Heuristic
+            const style = {
+              lineHeight: '1.375', // slightly increased for readability
+              marginTop: isInsideLi ? '0.05em' : '0.15em', // Reduced from 0.25em
+              marginBottom: isInsideLi ? '0.05em' : '0.15em', // Reduced
+            };
+            return <p style={style} className="break-words whitespace-normal">{children}</p>;
+          },
+          ul: ({ children }) => (
+            <ul 
+              style={{ 
+                marginTop: '0.2em', 
+                marginBottom: '0.2em',
+                paddingLeft: '1.5em' // slightly reduced
+              }} 
+              className="list-disc break-words"
+            >
+              {children}
+            </ul>
+          ),
+          ol: ({ children }) => (
+            <ol 
+              style={{ 
+                marginTop: '0.2em', 
+                marginBottom: '0.2em', 
+                paddingLeft: '1.75em' // slighly increased for number alignment
+              }} 
+              className="list-decimal break-words"
+            >
+              {children}
+            </ol>
+          ),
+          li: ({ children }) => (
+            <li
+              style={{ 
+                lineHeight: '1.375', // Better readability
+                marginTop: '0.125em', 
+                marginBottom: '0.125em',
+                display: 'list-item', // Ensures proper list behavior
+                listStylePosition: 'outside', // Keeps markers aligned
+              }} 
+              className="break-words"
+            >
+              {children}
+            </li>
+          ),
           h1: ({ children }) => <h1 className="text-2xl font-bold mt-3 mb-1 break-words">{children}</h1>,
           h2: ({ children }) => <h2 className="text-xl font-bold mt-2 mb-1 break-words">{children}</h2>,
           h3: ({ children }) => <h3 className="text-lg font-bold mt-1.5 mb-0.5 break-words">{children}</h3>,

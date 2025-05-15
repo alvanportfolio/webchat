@@ -23,6 +23,7 @@ export default function ChatContainer({ chatId }: ChatContainerProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null); // Added ref for the scrollable container
   const [isClient, setIsClient] = useState(false);
   
   // chatId should always be provided by the page, now as a UUID.
@@ -35,10 +36,20 @@ export default function ChatContainer({ chatId }: ChatContainerProps) {
     setIsClient(true);
   }, []);
 
-  // Scroll to bottom when messages change
+  // Scroll to bottom when messages change, but only if user is already near the bottom
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+    const container = scrollContainerRef.current;
+    if (container) {
+      const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 100; // 100px threshold
+      // Only auto-scroll if new message is added OR if it's the initial load and we want to scroll down.
+      // During streaming, messages array reference might not change, but its content does.
+      // This effect depends on `messages` array itself. For streaming, the `updateMessage`
+      // causes re-renders which might re-evaluate this.
+      if (isScrolledToBottom || messages.length <= 1) { // Scroll on first message too
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [messages]); // Re-evaluate when messages array changes (new message added)
 
   // Show config modal if API is not configured and hasn't been shown yet
   useEffect(() => {
@@ -223,7 +234,10 @@ export default function ChatContainer({ chatId }: ChatContainerProps) {
     <div className="flex flex-col h-full bg-[#212121]">
       <ChatHeader />
       
-      <div className="flex-1 overflow-y-auto custom-scrollbar max-w-3xl mx-auto w-full h-[calc(100vh-180px)] pb-9 transform translateZ(0) will-change-transform">
+      <div
+        ref={scrollContainerRef} // Added ref here
+        className="flex-1 overflow-y-auto custom-scrollbar max-w-3xl mx-auto w-full h-[calc(100vh-180px)] pb-9 transform translateZ(0) will-change-transform"
+      >
         {renderChatContent()}
         <div ref={messagesEndRef} />
       </div>

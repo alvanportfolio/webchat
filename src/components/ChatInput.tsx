@@ -32,7 +32,8 @@ export default function ChatInput({ onSendMessage, isLoading = false }: ChatInpu
       <form onSubmit={handleSubmit} className="flex flex-col max-w-3xl mx-auto bg-[#303030] rounded-xl p-2 m-2">
         <textarea
           ref={textareaRef}
-          className="w-full bg-transparent border-none text-gray-200 outline-none resize-none text-sm leading-relaxed p-1"
+          className="w-full bg-transparent border-none text-gray-200 outline-none resize-none text-sm leading-relaxed p-1 custom-scrollbar" // Added custom-scrollbar
+          style={{ maxHeight: '150px', overflowY: 'auto' }} // Added max-height and overflow-y
           placeholder="Send a message"
           rows={1}
           value={message}
