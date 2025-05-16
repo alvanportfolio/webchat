@@ -89,6 +89,39 @@ export default {
             blockquote: {
               color: 'var(--color-gray-300)',
             },
+            // Add specific overrides for lists and paragraphs for better spacing
+            p: {
+              marginTop: '0.5em', // Default for standalone paragraphs
+              marginBottom: '0.5em',
+              lineHeight: '1.625',
+            },
+            ul: {
+              marginTop: '0.5em',
+              marginBottom: '0.5em',
+              paddingLeft: '1.65em', // Adjusted for marker alignment
+            },
+            ol: {
+              marginTop: '0.5em',
+              marginBottom: '0.5em',
+              paddingLeft: '1.65em', // Adjusted for marker alignment
+            },
+            li: {
+              marginTop: '0.2em', // Reduced margin for list items
+              marginBottom: '0.2em',
+            },
+            // Crucial: Remove margins from paragraphs, and nested lists directly inside list items
+            'li > p': {
+              marginTop: '0',
+              marginBottom: '0',
+            },
+            'li > ul': {
+              marginTop: '0.2em', // Small margin for nested lists
+              marginBottom: '0.2em',
+            },
+            'li > ol': {
+              marginTop: '0.2em', // Small margin for nested lists
+              marginBottom: '0.2em',
+            },
           },
         },
       },

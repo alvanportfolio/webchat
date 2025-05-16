@@ -90,7 +90,7 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
   }, [content, isStreaming]);
   
   return (
-    <div className="prose prose-invert max-w-none break-words overflow-hidden prose-p:my-0.5 prose-headings:my-1.5 prose-li:my-0 prose-ul:my-0.5 prose-ol:my-0.5 prose-blockquote:my-1">
+    <div className="prose prose-invert max-w-none break-words overflow-hidden prose-headings:my-1.5 prose-blockquote:my-1"> {/* Removed prose-li, prose-ul, prose-ol specific margin/padding utilities */}
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -152,23 +152,23 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
             );
           },
           // Customize other elements with reduced spacing and proper wrapping
-          p: ({ children, node }) => {
-            // Check if the paragraph is directly inside a list item
-            const isInsideLi = node?.position?.start.line !== node?.position?.end.line || (node?.children.length > 0 && node.children[0].type === 'text'); // Heuristic
+          p: ({ children, node, ...props }) => {
+            let isInsideListItem = false;
+            // Access parent node using type assertion to overcome TS errors
+            // const parentNode = (node as any)?.parent; 
+            // if (parentNode && parentNode.type === 'element' && parentNode.tagName === 'li') {
+            //   isInsideListItem = true;
+            // }
+            
+            // Let globals.css handle margins for p inside li
             const style = {
               lineHeight: '1.375', // slightly increased for readability
-              marginTop: isInsideLi ? '0.05em' : '0.15em', // Reduced from 0.25em
-              marginBottom: isInsideLi ? '0.05em' : '0.15em', // Reduced
             };
-            return <p style={style} className="break-words whitespace-normal">{children}</p>;
+            return <p style={style} className="break-words whitespace-normal" {...props}>{children}</p>;
           },
           ul: ({ children }) => (
             <ul 
-              style={{ 
-                marginTop: '0.2em', 
-                marginBottom: '0.2em',
-                paddingLeft: '1.5em' // slightly reduced
-              }} 
+              // Removed inline styles for margin and padding
               className="list-disc break-words"
             >
               {children}
@@ -176,11 +176,7 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
           ),
           ol: ({ children }) => (
             <ol 
-              style={{ 
-                marginTop: '0.2em', 
-                marginBottom: '0.2em', 
-                paddingLeft: '1.75em' // slighly increased for number alignment
-              }} 
+              // Removed inline styles for margin and padding
               className="list-decimal break-words"
             >
               {children}
@@ -189,9 +185,8 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
           li: ({ children }) => (
             <li
               style={{ 
-                lineHeight: '1.375', // Better readability
-                marginTop: '0.125em', 
-                marginBottom: '0.125em',
+                // lineHeight removed, will be handled by CSS
+                // marginTop and marginBottom removed
                 display: 'list-item', // Ensures proper list behavior
                 listStylePosition: 'outside', // Keeps markers aligned
               }} 
@@ -256,4 +251,4 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
       </ReactMarkdown>
     </div>
   );
-} 
+}

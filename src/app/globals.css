@@ -304,42 +304,44 @@
   word-break: break-word;
 }
 
+/* Commenting out custom prose styles to rely on tailwind.config.ts typography settings */
+/*
 .prose p {
-  margin-top: 0.15rem; /* Reduced */
-  margin-bottom: 0.15rem; /* Reduced */
-  line-height: 1.375; /* Better readability */
+  margin-top: 0.15rem; 
+  margin-bottom: 0.15rem; 
+  line-height: 1.375; 
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
 }
 
 .prose ul, .prose ol {
-  margin-top: 0.2em; /* Reduced */
-  margin-bottom: 0.2em; /* Reduced */
-  padding-left: 1.75em; /* Adjusted for better marker alignment */
+  margin-top: 0.2em; 
+  margin-bottom: 0.2em; 
+  padding-left: 1.75em; 
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
 
 .prose li {
-  margin-top: 0.125em; /* Reduced gap between list items */
+  margin-top: 0.125em; 
   margin-bottom: 0.125em;
-  line-height: 1.375; /* Better line height for readability */
-  display: list-item; /* Ensure it's treated as a list item */
-  list-style-position: outside; /* Align markers outside text */
-  text-indent: 0; /* Prevent text from indenting */
+  line-height: 1.375; 
+  display: list-item; 
+  list-style-position: outside; 
+  text-indent: 0; 
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
 
-/* Ensure direct children of li (like p) don't add extra margins and inherit line-height */
-.prose li > p {
+.prose li p { 
   margin-top: 0 !important;
   margin-bottom: 0 !important;
   line-height: inherit !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
+*/
 
 /* Improve marker alignment */
 .prose ::marker {
