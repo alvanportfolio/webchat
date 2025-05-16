@@ -304,44 +304,52 @@
   word-break: break-word;
 }
 
-/* Commenting out custom prose styles to rely on tailwind.config.ts typography settings */
-/*
+/* Re-enabling and adjusting custom prose styles with !important for forceful override */
+
 .prose p {
-  margin-top: 0.15rem; 
-  margin-bottom: 0.15rem; 
-  line-height: 1.375; 
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
+  margin-top: 0.5em !important; /* Default for standalone paragraphs */
+  margin-bottom: 0.5em !important;
+  /* line-height is handled by MarkdownRenderer.tsx or Tailwind defaults */
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  hyphens: auto !important;
 }
 
 .prose ul, .prose ol {
-  margin-top: 0.2em; 
-  margin-bottom: 0.2em; 
-  padding-left: 1.75em; 
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+  margin-top: 0.5em !important;
+  margin-bottom: 0.5em !important;
+  padding-left: 1.75em !important; /* Adjusted for better marker alignment */
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
 }
 
 .prose li {
-  margin-top: 0.125em; 
-  margin-bottom: 0.125em;
-  line-height: 1.375; 
-  display: list-item; 
-  list-style-position: outside; 
-  text-indent: 0; 
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+  margin-top: 0.2em !important; /* Small margin for list items */
+  margin-bottom: 0.2em !important; /* Small margin for list items */
+  /* line-height is handled by MarkdownRenderer.tsx or Tailwind defaults */
+  display: list-item !important; 
+  list-style-position: outside !important; 
+  text-indent: 0 !important; 
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
 }
 
-.prose li p { 
+/* Crucial: Remove margins from paragraphs directly inside list items */
+.prose li > p { 
   margin-top: 0 !important;
   margin-bottom: 0 !important;
-  line-height: inherit !important;
+  line-height: inherit !important; /* Inherit from li or p's inline style */
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
-*/
+
+/* Ensure nested lists also have controlled spacing */
+.prose li > ul,
+.prose li > ol {
+  margin-top: 0.2em !important;
+  margin-bottom: 0.2em !important;
+}
+
 
 /* Improve marker alignment */
 .prose ::marker {
