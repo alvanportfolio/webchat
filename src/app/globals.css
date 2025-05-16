@@ -112,6 +112,59 @@
     background-color: rgba(0, 0, 0, 0.7) !important;
     backdrop-filter: blur(5px) !important;
   }
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
 }
 
 /* Reusable component classes */
@@ -296,7 +349,8 @@
   scroll-behavior: smooth;
 }
 
-/* Prose styling for AI messages */
+/* Clean, minimal prose styling - relying on Tailwind Typography plugin */
+/* This matches ChatGPT's markdown rendering behavior */
 .prose {
   max-width: 100%;
   overflow-wrap: break-word;
@@ -304,98 +358,55 @@
   word-break: break-word;
 }
 
-/* Re-enabling and adjusting custom prose styles with !important for forceful override */
-
-.prose p {
-  margin-top: 0.5em !important; /* Default for standalone paragraphs */
-  margin-bottom: 0.5em !important;
-  /* line-height is handled by MarkdownRenderer.tsx or Tailwind defaults */
-  overflow-wrap: break-word !important;
-  word-wrap: break-word !important;
-  hyphens: auto !important;
-}
-
-.prose ul, .prose ol {
-  margin-top: 0.5em !important;
-  margin-bottom: 0.5em !important;
-  padding-left: 1.75em !important; /* Adjusted for better marker alignment */
-  overflow-wrap: break-word !important;
-  word-wrap: break-word !important;
-}
-
-.prose li {
-  margin-top: 0.2em !important; /* Small margin for list items */
-  margin-bottom: 0.2em !important; /* Small margin for list items */
-  /* line-height is handled by MarkdownRenderer.tsx or Tailwind defaults */
-  display: list-item !important; 
-  list-style-position: outside !important; 
-  text-indent: 0 !important; 
-  overflow-wrap: break-word !important;
-  word-wrap: break-word !important;
-}
-
-/* Crucial: Remove margins from paragraphs directly inside list items */
-.prose li > p { 
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  line-height: inherit !important; /* Inherit from li or p's inline style */
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-/* Ensure nested lists also have controlled spacing */
-.prose li > ul,
-.prose li > ol {
-  margin-top: 0.2em !important;
-  margin-bottom: 0.2em !important;
-}
-
-
-/* Improve marker alignment */
-.prose ::marker {
-  color: #9b9b9b; /* Slightly better contrast */
-}
-
+/* Basic resets to ensure compatibility with the ThinkingSection component */
 .prose code {
-  background-color: rgba(55, 55, 55, 0.8);
-  border-radius: 0.25rem;
-  padding: 0.125rem 0.25rem;
   font-family: monospace;
-  white-space: pre-wrap;
-  word-wrap: break-word;
 }
 
 .prose pre {
-  background-color: rgba(30, 30, 30, 0.8);
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin: 1rem 0;
-  overflow-x: auto;
-  max-width: 100%;
+  margin: 0;
 }
 
 .prose pre code {
   background-color: transparent;
   padding: 0;
-  white-space: pre-wrap;
-  word-wrap: break-word;
 }
 
-/* Fix for long URLs and text strings */
-.prose a {
-  word-break: break-all;
-  overflow-wrap: break-word;
+/* Custom scrollbar styling for markdown code blocks */
+.markdown-code-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
 }
 
-/* Fix for tables */
-.prose table {
-  table-layout: fixed;
-  width: 100%;
+.markdown-code-scrollbar::-webkit-scrollbar-track {
+  background: rgba(30, 30, 30, 0.4);
+  border-radius: 3px;
 }
 
-.prose td, .prose th {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: break-word;
-  hyphens: auto;
+.markdown-code-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(90, 90, 90, 0.7);
+  border-radius: 3px;
+}
+
+.markdown-code-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(120, 120, 120, 0.8);
+}
+
+.markdown-code-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar styling */
+.markdown-code-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(90, 90, 90, 0.7) rgba(30, 30, 30, 0.4);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

@@ -2139,9 +2139,11 @@ __metadata:
     eslint-config-next: "npm:15.1.7"
     framer-motion: "npm:^12.4.7"
     katex: "npm:^0.16.21"
+    lucide-react: "npm:^0.510.0"
     magic-sdk: "npm:^28.21.1"
     mermaid: "npm:^11.4.1"
     moji: "npm:^0.5.1"
+    motion: "npm:^12.11.4"
     next: "npm:15.1.7"
     next-auth: "npm:^4.24.11"
     nodemailer: "npm:^7.0.3"
@@ -2158,8 +2160,9 @@ __metadata:
     remark: "npm:^15.0.1"
     remark-emoji: "npm:^5.0.1"
     remark-gfm: "npm:^4.0.1"
-    tailwind-merge: "npm:^3.0.2"
+    tailwind-merge: "npm:^3.3.0"
     tailwindcss: "npm:^3.4.1"
+    tailwindcss-animate: "npm:^1.0.7"
     typescript: "npm:^5"
     uuid: "npm:^11.1.0"
     zustand: "npm:^5.0.3"
@@ -3904,6 +3907,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"framer-motion@npm:^12.11.4":
+  version: 12.11.4
+  resolution: "framer-motion@npm:12.11.4"
+  dependencies:
+    motion-dom: "npm:^12.11.4"
+    motion-utils: "npm:^12.9.4"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10c0/d11cba6a7cacde0197aabb9bb3c9766e28c5e61b783462595836d6f568b7fb6c3cec6da56889daf6c91da2fb8d0b32724cd1621a6998027241edc4ec96232349
+  languageName: node
+  linkType: hard
+
 "framer-motion@npm:^12.4.7":
   version: 12.4.7
   resolution: "framer-motion@npm:12.4.7"
@@ -5304,6 +5329,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lucide-react@npm:^0.510.0":
+  version: 0.510.0
+  resolution: "lucide-react@npm:0.510.0"
+  peerDependencies:
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/00b3efed64c370cd5ae97023583996ff83939baf6f4af11393d536ca9e520b0cc1a82a81aa6d0350625bff398daaa69357df74383631f2c3a0aeb6974f4237c7
+  languageName: node
+  linkType: hard
+
 "magic-sdk@npm:^28.21.1":
   version: 28.21.1
   resolution: "magic-sdk@npm:28.21.1"
@@ -6114,6 +6148,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"motion-dom@npm:^12.11.4":
+  version: 12.11.4
+  resolution: "motion-dom@npm:12.11.4"
+  dependencies:
+    motion-utils: "npm:^12.9.4"
+  checksum: 10c0/3690ae25f1ba080d7a7d601491eb79db6ff24cdb3617ba517dbb69f9dbaf3955b0d5781e0183fc8d7961a36b9f1c35a238148e63433be39821f7f9bb93d25e7a
+  languageName: node
+  linkType: hard
+
 "motion-dom@npm:^12.4.5":
   version: 12.4.5
   resolution: "motion-dom@npm:12.4.5"
@@ -6127,6 +6170,34 @@ __metadata:
   version: 12.0.0
   resolution: "motion-utils@npm:12.0.0"
   checksum: 10c0/ca6cc7542d00afab011130fcd940e5f5a412b21a4eaeb17c0a497dcb86de311dda90741eeca7de1276cc8c1dff7ac1e6a8df1e8cebb1191a2c43bfe8368dc70b
+  languageName: node
+  linkType: hard
+
+"motion-utils@npm:^12.9.4":
+  version: 12.9.4
+  resolution: "motion-utils@npm:12.9.4"
+  checksum: 10c0/b6783babfd1282ad320585f7cdac9fe7a1f97b39e07d12a500d3709534441bd9d49b556fa1cd838d1bde188570d4ab6b4c5aa9d297f7f5aa9dc16d600c17afdc
+  languageName: node
+  linkType: hard
+
+"motion@npm:^12.11.4":
+  version: 12.11.4
+  resolution: "motion@npm:12.11.4"
+  dependencies:
+    framer-motion: "npm:^12.11.4"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10c0/b2915e5d8c81231bc1096c3ecacd3f69aeeccc944afd5f8725eda97b89daa27aa3776ccfba7da7a0bb41e52c6621dff3a06900257998bb917b7d1e333013c4ff
   languageName: node
   linkType: hard
 
@@ -8074,10 +8145,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwind-merge@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "tailwind-merge@npm:3.0.2"
-  checksum: 10c0/73f528345e5130e7690c5c57701155849ae4f0834e0a4bf56bc03e25d4563d45d4905ff9c487a7dce9efdfa18689a223e78365962105ad0e2f2d1226216c66ef
+"tailwind-merge@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "tailwind-merge@npm:3.3.0"
+  checksum: 10c0/a50cd141100486f98541dfab3705712af5860556689b7496dc6b0284374f02d12d5471f0f40035f6bb8b1c749c422060a1f3e5f8900057d8a7786b111c8472e6
+  languageName: node
+  linkType: hard
+
+"tailwindcss-animate@npm:^1.0.7":
+  version: 1.0.7
+  resolution: "tailwindcss-animate@npm:1.0.7"
+  peerDependencies:
+    tailwindcss: "*"
+  checksum: 10c0/ec7dbd1631076b97d66a1fbaaa06e0725fccfa63119221e8d87a997b02dcede98ad88bb1ef6665b968f5d260fcefb10592e0299ca70208d365b37761edf5e19a
   languageName: node
   linkType: hard
 

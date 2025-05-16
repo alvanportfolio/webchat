@@ -232,7 +232,7 @@ export default function ChatContainer({ chatId }: ChatContainerProps) {
 
   return (
     <div className="flex flex-col h-full bg-[#212121]">
-      <ChatHeader />
+      <ChatHeader isLoading={isLoading} />
       
       <div
         ref={scrollContainerRef} // Added ref here

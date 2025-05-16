@@ -3,9 +3,10 @@ import { useApiConfigStore } from '@/store/apiConfigStore';
 
 interface ModelSelectorProps {
   onConfigClick: () => void;
+  isLoading?: boolean;
 }
 
-export default function ModelSelector({ onConfigClick }: ModelSelectorProps) {
+export default function ModelSelector({ onConfigClick, isLoading = false }: ModelSelectorProps) {
   const { availableModels, selectedModel, setSelectedModel, isConfigured } = useApiConfigStore();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -35,8 +36,17 @@ export default function ModelSelector({ onConfigClick }: ModelSelectorProps) {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => isConfigured ? setIsOpen(!isOpen) : onConfigClick()}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-750 text-sm text-gray-300 border border-gray-700"
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-750 text-sm text-gray-300 border border-gray-700 relative overflow-hidden"
       >
+        {isLoading && (
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute inset-0 h-full w-full animate-shimmer-slide" style={{
+              background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent)',
+              zIndex: 1,
+              '--speed': '2s'
+            } as React.CSSProperties}></div>
+          </div>
+        )}
         {isConfigured ? (
           <>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">

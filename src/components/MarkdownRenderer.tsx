@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import { useState } from 'react';
 
 interface MarkdownRendererProps {
   content: string;
@@ -20,7 +21,7 @@ function CopyButton({ code }: { code: string }) {
   };
   
   return (
-    <button 
+    <button
       onClick={handleCopy}
       className="absolute top-2 right-2 p-1.5 rounded-md bg-gray-700/70 hover:bg-gray-600/70 text-gray-300 hover:text-white transition-colors"
       aria-label="Copy code to clipboard"
@@ -77,22 +78,11 @@ function LanguageIndicator({ language }: { language: string }) {
 }
 
 export default function MarkdownRenderer({ content, isStreaming = false }: MarkdownRendererProps) {
-  const [renderedContent, setRenderedContent] = useState(content);
-  
-  // Apply typing effect for streaming content
-  useEffect(() => {
-    if (!isStreaming) {
-      setRenderedContent(content);
-      return;
-    }
-    
-    setRenderedContent(content);
-  }, [content, isStreaming]);
-  
   return (
-    <div className="prose prose-invert max-w-none break-words overflow-hidden prose-headings:my-1.5 prose-blockquote:my-1"> {/* Removed prose-li, prose-ul, prose-ol specific margin/padding utilities */}
+    <div className="prose dark:prose-invert max-w-none break-words markdown-code-scrollbar">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
         components={{
           code: ({ className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '');
@@ -102,7 +92,7 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
             // Check if this is an inline code block
             if (!className || !match) {
               return (
-                <code className="bg-gray-800 px-1.5 py-0.5 rounded text-sm break-words whitespace-normal" {...props}>
+                <code className="bg-gray-800 px-1.5 py-0.5 rounded text-sm" {...props}>
                   {children}
                 </code>
               );
@@ -127,6 +117,7 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
                     wrapLines={true}
                     wrapLongLines={true}
                     lineNumberStyle={{ color: '#6b7280', paddingRight: '1em', borderRight: '1px solid #374151' }}
+                    className="markdown-code-scrollbar"
                     customStyle={{
                       margin: 0,
                       padding: '2.5rem 1rem 1rem 1rem',
@@ -134,14 +125,6 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
                       backgroundColor: '#121212',
                       maxWidth: '100%',
                       overflowX: 'auto',
-                      wordBreak: 'break-word',
-                      whiteSpace: 'pre-wrap',
-                    }}
-                    codeTagProps={{
-                      style: {
-                        whiteSpace: 'pre-wrap',
-                        wordBreak: 'break-word',
-                      }
                     }}
                     {...props}
                   >
@@ -150,104 +133,10 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
                 </div>
               </div>
             );
-          },
-          // Customize other elements with reduced spacing and proper wrapping
-          p: ({ children, node, ...props }) => {
-            let isInsideListItem = false;
-            // Access parent node using type assertion to overcome TS errors
-            // const parentNode = (node as any)?.parent; 
-            // if (parentNode && parentNode.type === 'element' && parentNode.tagName === 'li') {
-            //   isInsideListItem = true;
-            // }
-            
-            // Let globals.css handle margins for p inside li
-            const style = {
-              lineHeight: '1.375', // slightly increased for readability
-            };
-            return <p style={style} className="break-words whitespace-normal" {...props}>{children}</p>;
-          },
-          ul: ({ children }) => (
-            <ul 
-              // Removed inline styles for margin and padding
-              className="list-disc break-words"
-            >
-              {children}
-            </ul>
-          ),
-          ol: ({ children }) => (
-            <ol 
-              // Removed inline styles for margin and padding
-              className="list-decimal break-words"
-            >
-              {children}
-            </ol>
-          ),
-          li: ({ children }) => (
-            <li
-              style={{ 
-                // lineHeight removed, will be handled by CSS
-                // marginTop and marginBottom removed
-                display: 'list-item', // Ensures proper list behavior
-                listStylePosition: 'outside', // Keeps markers aligned
-              }} 
-              className="break-words"
-            >
-              {children}
-            </li>
-          ),
-          h1: ({ children }) => <h1 className="text-2xl font-bold mt-3 mb-1 break-words">{children}</h1>,
-          h2: ({ children }) => <h2 className="text-xl font-bold mt-2 mb-1 break-words">{children}</h2>,
-          h3: ({ children }) => <h3 className="text-lg font-bold mt-1.5 mb-0.5 break-words">{children}</h3>,
-          a: ({ href, children }) => (
-            <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline break-words overflow-wrap">
-              {children}
-            </a>
-          ),
-          blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-gray-600 pl-4 py-0.5 my-1.5 text-gray-300 bg-gray-800/30 rounded-r break-words">
-              {children}
-            </blockquote>
-          ),
-          table: ({ children }) => (
-            <div className="overflow-x-auto my-2 max-w-full">
-              <table className="border-collapse border border-gray-700 w-full table-auto">
-                {children}
-              </table>
-            </div>
-          ),
-          thead: ({ children }) => <thead className="bg-gray-800">{children}</thead>,
-          tbody: ({ children }) => <tbody>{children}</tbody>,
-          tr: ({ children }) => <tr className="border-b border-gray-700">{children}</tr>,
-          th: ({ children }) => <th className="border border-gray-700 px-4 py-2 text-left break-words">{children}</th>,
-          td: ({ children }) => <td className="border border-gray-700 px-4 py-2 break-words">{children}</td>,
-          // Add proper spacing for breaks
-          br: () => <br className="my-0" />,
-          // Ensure proper spacing between adjacent elements
-          div: ({ children }) => <div className="my-0 break-words">{children}</div>,
-          span: ({ children }) => <span className="my-0 break-words">{children}</span>,
-          // Handle pre tags for better overflow
-          pre: ({ children }) => <pre className="overflow-x-auto max-w-full">{children}</pre>,
-          // Handle images to prevent overflow
-          img: ({ src, alt, ...props }) => {
-            if (!src) return null;
-            
-            // For external images, we need to use a regular img tag
-            // as Next.js Image requires either width/height or layout="fill"
-            return (
-              <div className="my-2">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src={src} 
-                  alt={alt || ''} 
-                  className="max-w-full h-auto rounded-md" 
-                  {...props} 
-                />
-              </div>
-            );
-          },
+          }
         }}
       >
-        {renderedContent}
+        {content}
       </ReactMarkdown>
     </div>
   );

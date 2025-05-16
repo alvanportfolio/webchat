@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { v4 as uuidv4 } from 'uuid';
 import { useSidebarStore } from '@/store/sidebarStore';
 import { useChatHistoryStore, ChatItem } from '@/store/chatHistoryStore';
 import { useConversationStore } from '@/store/conversationStore';
@@ -48,7 +49,7 @@ export default function Sidebar() {
 
   // Create new chat
   const handleNewChat = () => {
-    const newChatId = Date.now().toString();
+    const newChatId = uuidv4();
     router.push(`/chat/${newChatId}`);
   };
 

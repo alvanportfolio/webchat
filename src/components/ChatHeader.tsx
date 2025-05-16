@@ -6,7 +6,11 @@ import ApiConfigModal from './ApiConfigModal';
 import { useApiConfigStore } from '@/store/apiConfigStore';
 import { GiFairyWand } from "react-icons/gi";
 
-export default function ChatHeader() {
+interface ChatHeaderProps {
+  isLoading?: boolean;
+}
+
+export default function ChatHeader({ isLoading = false }: ChatHeaderProps) {
   const [showAiDialog, setShowAiDialog] = useState(false);
   const [showApiConfigModal, setShowApiConfigModal] = useState(false);
   const { isConfigured } = useApiConfigStore();
@@ -33,7 +37,7 @@ export default function ChatHeader() {
 
         {/* Center - Model Selector */}
         <div className="flex items-center justify-center">
-          <ModelSelector onConfigClick={openApiConfigModal} />
+          <ModelSelector onConfigClick={openApiConfigModal} isLoading={isLoading} />
         </div>
 
         {/* Right side - API Config icon and Info icon */}
