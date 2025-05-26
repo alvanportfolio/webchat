@@ -1,13 +1,15 @@
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
-import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm'; // For GitHub Flavored Markdown
+import rehypeRaw from 'rehype-raw'; // To render HTML embedded in markdown
+import rehypeKatex from 'rehype-katex'; // To render math formulas using KaTeX
+import 'katex/dist/katex.min.css'; // CSS for KaTeX
 import { useState } from 'react';
 
 interface MarkdownRendererProps {
   content: string;
-  isStreaming?: boolean;
+  // isStreaming prop was removed as it was unused and its intended functionality unclear.
 }
 
 // Component for the copy button in code blocks
@@ -42,32 +44,12 @@ function CopyButton({ code }: { code: string }) {
 
 // Component for the language indicator in code blocks
 function LanguageIndicator({ language }: { language: string }) {
-  // Map of language identifiers to display names
   const languageMap: Record<string, string> = {
-    js: 'JavaScript',
-    jsx: 'React JSX',
-    ts: 'TypeScript',
-    tsx: 'React TSX',
-    py: 'Python',
-    rb: 'Ruby',
-    java: 'Java',
-    go: 'Go',
-    rust: 'Rust',
-    c: 'C',
-    cpp: 'C++',
-    cs: 'C#',
-    php: 'PHP',
-    html: 'HTML',
-    css: 'CSS',
-    json: 'JSON',
-    yaml: 'YAML',
-    md: 'Markdown',
-    sql: 'SQL',
-    bash: 'Bash',
-    sh: 'Shell',
-    // Add more languages as needed
+    js: 'JavaScript', jsx: 'React JSX', ts: 'TypeScript', tsx: 'React TSX',
+    py: 'Python', rb: 'Ruby', java: 'Java', go: 'Go', rust: 'Rust',
+    c: 'C', cpp: 'C++', cs: 'C#', php: 'PHP', html: 'HTML', css: 'CSS',
+    json: 'JSON', yaml: 'YAML', md: 'Markdown', sql: 'SQL', bash: 'Bash', sh: 'Shell',
   };
-  
   const displayName = languageMap[language] || language;
   
   return (
@@ -77,20 +59,19 @@ function LanguageIndicator({ language }: { language: string }) {
   );
 }
 
-export default function MarkdownRenderer({ content, isStreaming = false }: MarkdownRendererProps) {
+export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <div className="prose dark:prose-invert max-w-none break-words markdown-code-scrollbar">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw]}
+        remarkPlugins={[remarkGfm]} // Enables GFM features: tables, strikethrough, task lists, etc.
+        rehypePlugins={[rehypeRaw, rehypeKatex]} // rehypeRaw allows HTML in markdown; rehypeKatex enables math rendering.
         components={{
           code: ({ className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             const code = String(children).replace(/\n$/, '');
             
-            // Check if this is an inline code block
-            if (!className || !match) {
+            if (!className || !match) { // Inline code
               return (
                 <code className="bg-gray-800 px-1.5 py-0.5 rounded text-sm" {...props}>
                   {children}
@@ -98,31 +79,37 @@ export default function MarkdownRenderer({ content, isStreaming = false }: Markd
               );
             }
             
-            // This is a code block with syntax highlighting
+            // Code block with syntax highlighting
             return (
               <div className="relative my-2 group">
                 <div className="rounded-lg overflow-hidden border border-gray-700 shadow-lg">
-                  {/* Language indicator */}
                   <LanguageIndicator language={language} />
-                  
-                  {/* Copy button */}
                   <CopyButton code={code} />
-                  
-                  {/* Code block with syntax highlighting */}
                   <SyntaxHighlighter
-                    // @ts-expect-error - The type definitions for react-syntax-highlighter are incorrect
+                    // The 'style' prop type from '@types/react-syntax-highlighter' (v15.5.13 currently)
+                    // may not perfectly align with the structure of style objects like 'oneDark'
+                    // imported from 'react-syntax-highlighter/dist/cjs/styles/prism'.
+                    // This is a known discrepancy often encountered with CJS/ESM interop or type definitions.
+                    // 'oneDark' is expected to function correctly at runtime.
+                    // The @ts-expect-error is used to suppress the TypeScript error,
+                    // allowing compilation. A more permanent fix might involve:
+                    // 1. Augmenting the type definition for the style prop.
+                    // 2. Finding an alternative way to import styles if an ESM-compatible version exists and aligns better.
+                    // 3. Updating @types/react-syntax-highlighter if a newer version resolves this.
+                    // For now, maintaining functionality with @ts-expect-error is prioritized.
+                    // @ts-expect-error - Known type issue with react-syntax-highlighter CJS style imports.
                     style={oneDark}
                     language={language}
                     showLineNumbers={true}
                     wrapLines={true}
                     wrapLongLines={true}
                     lineNumberStyle={{ color: '#6b7280', paddingRight: '1em', borderRight: '1px solid #374151' }}
-                    className="markdown-code-scrollbar"
+                    className="markdown-code-scrollbar" // Ensure this class is styled for scrollbars if needed
                     customStyle={{
                       margin: 0,
-                      padding: '2.5rem 1rem 1rem 1rem',
-                      borderRadius: '0.375rem',
-                      backgroundColor: '#121212',
+                      padding: '2.5rem 1rem 1rem 1rem', // Top padding for language indicator/copy button
+                      borderRadius: '0.375rem', // Matches parent div's rounding
+                      backgroundColor: '#121212', // Dark background for code
                       maxWidth: '100%',
                       overflowX: 'auto',
                     }}

@@ -89,7 +89,7 @@ export default function ChatContainer({ chatId }: ChatContainerProps) {
 
     // Add user message
     const userMessage: MessageType = {
-      id: Date.now().toString(), // Consider UUID for message IDs too if needed for uniqueness
+      id: crypto.randomUUID(),
       content,
       isUser: true,
       timestamp: new Date().toISOString(),
@@ -114,7 +114,7 @@ export default function ChatContainer({ chatId }: ChatContainerProps) {
     }
     
     // Create a placeholder for the AI response
-    const aiMessageId = (Date.now() + 1).toString();
+    const aiMessageId = crypto.randomUUID();
     const aiMessage: MessageType = {
       id: aiMessageId,
       content: '',
