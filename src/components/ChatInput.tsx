@@ -45,15 +45,8 @@ export default function ChatInput({ onSendMessage, isLoading = false }: ChatInpu
             }
           }}
         />
-        <div className="flex justify-between mt-1">
-          <button 
-            type="button"
-            className="p-1.5 rounded-lg bg-transparent text-gray-500 border-none cursor-pointer flex items-center justify-center hover:bg-gray-800 hover:text-gray-300"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M12 4.5v15m7.5-7.5h-15"></path>
-            </svg>
-          </button>
+        <div className="flex justify-end mt-1">
+          {/* Attachment button removed */}
           <button 
             type="submit"
             className={`rounded-full p-1.5 flex items-center justify-center ${
