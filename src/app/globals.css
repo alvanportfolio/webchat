@@ -417,3 +417,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* AI Icon Glowing Effect */
+.ai-icon-glowing {
+  box-shadow: 0 0 12px 3px rgba(0, 255, 255, 0.7); /* Aqua glow */
+  border-radius: 50%; /* Ensure glow respects rounded icon container */
+}
