@@ -106,12 +106,13 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
                     lineNumberStyle={{ color: '#6b7280', paddingRight: '1em', borderRight: '1px solid #374151' }}
                     className="markdown-code-scrollbar" // Ensure this class is styled for scrollbars if needed
                     customStyle={{
-                      margin: 0,
-                      padding: '2.5rem 1rem 1rem 1rem', // Top padding for language indicator/copy button
-                      borderRadius: '0.375rem', // Matches parent div's rounding
-                      backgroundColor: '#121212', // Dark background for code
-                      maxWidth: '100%',
-                      overflowX: 'auto',
+                      margin: '0', // No external margins
+                      padding: '1.75rem 1rem 1rem 1rem', // Adjusted top padding, other paddings
+                      borderRadius: '0.375rem', // Keep rounded corners
+                      // backgroundColor: '#121212', // Let oneDark style provide its background
+                      maxWidth: '100%', // Ensure it doesn't overflow its container
+                      overflowX: 'auto', // Allow horizontal scroll for long lines
+                      fontSize: '0.875rem', // Slightly smaller font for code
                     }}
                     {...props}
                   >
